@@ -1,1 +1,3 @@
-console.log ("Hello DENO!")
+for (let i = 0; i < 5; i++) {
+  console.log("Hello DENO!");
+}
