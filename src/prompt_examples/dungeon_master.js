@@ -19,10 +19,11 @@ async function main() {
 
   const context = [];
   let playing = true;
-  const location = "woods";
+  // const location = "woods";
+  const location = "pluto";
   const player = {};
   player.name = await ask("What is your name?");
-  player.class = await ask("What is your class?");
+  player.orbit = await ask("How long have you been orbiting?");
 
   say("");
 
@@ -34,14 +35,17 @@ async function main() {
 
     const prompt = `
   This is a text adventure game.
-  The player is a ${player.class} named ${player.name}.
+  The player is named ${player.name} and they've been in outerspace for ${
+      player.orbit
+    } years.
   The current setting is ${location}.
  
   Recently: ${context.slice(-3).join(" ")}
 
   Respond in second person.
   Be breif, and avoid narating actions not taken by the player via commands.
-  When describing locations mention places the player might go.
+  When describing locations mention places the player might go. Mention orbiting routes the player might take.
+  Exit the game when the player says end of conversation. The tone is sci fi research.
 
   
 

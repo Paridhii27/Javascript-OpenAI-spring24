@@ -16,7 +16,12 @@ async function main() {
 
   say("");
 
-  const prompt = `My name is ${name} and I am from ${town}. Create a limerick about me.`;
+  const prompt = `My name is ${name} and I am from ${town}. 
+    Create a haiku about me. Haikus have three lines. They don't rhyme. 
+    It has five syllables in the first and third lines.
+    It has seven syllables in the second line. 
+    It conveys a single moment of insight based on observations. 
+    It includes a seasonal reference`;
 
   const limerick = await gptPrompt(prompt, { temperature: 0.7 });
   say(`"""\n${limerick}\n"""`);

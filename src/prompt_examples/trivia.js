@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-var
 /**
  * triva.js
  * Uses GPT to generate trivia questions based on a user-provided topic.
@@ -22,7 +23,7 @@ async function main() {
 
     Include only the array, start with [ and end with ].
     `,
-    { max_tokens: 1024, temperature: 0.3 }
+    { max_tokens: 1024, temperature: 0.9 }
   );
 
   let questions = [];
@@ -35,6 +36,7 @@ async function main() {
   }
 
   say("");
+  var correctResponse = 0;
 
   for (const q of questions) {
     const a = await ask(q);
@@ -49,6 +51,15 @@ async function main() {
       { max_tokens: 64, temperature: 0.1 }
     );
     say(response);
+
+    if (response.includes("Yes")) {
+      correctResponse++;
+    }
     say("");
+    if (correctResponse == 1) {
+      say(`${correctResponse} question was answered correctly.`);
+    } else {
+      say(`${correctResponse} questions were answered correctly.`);
+    }
   }
 }
