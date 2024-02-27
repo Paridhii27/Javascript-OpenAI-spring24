@@ -74,7 +74,7 @@ async function generateRoomInventory() {
   const obj = await ask("State three objects you find in this room");
   const objPrompt = `Create an easy encryption puzzle based on the ${obj} in the space. Give the user three guesses to solve the puzzle. Do not give scenario background as this is part of an escape room where the player must make inferences just based on the space.`;
   const objResponse = await gptPrompt(objPrompt, {
-    max_tokens: 400,
+    max_tokens: 200,
     temperature: 0.7,
   });
   say(objResponse);
