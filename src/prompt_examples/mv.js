@@ -31,9 +31,11 @@ async function main() {
   );
 
   // Generate questions for the music video direction
-  const videoQPrompt = `You are the creative director for the music video of your original song "${songname}" which evokes emotions such as "${emotion}", 
-  you need to create a captivating narrative with visual effects. The video is set in "${landmark}" and will prominently feature the theme or object "${object}".
-  To delve deeper into the creative process and ensure a comprehensive understanding of your vision, consider the following aspects:
+  const videoQPrompt = `You are the creative director for the music video of your original song "${songname}" 
+  which evokes emotions such as "${emotion}", you need to create a captivating narrative with visual effects. 
+  The video is set in "${landmark}" and will prominently feature the theme or object "${object}".
+  To delve deeper into the creative process and ensure a comprehensive understanding of your vision, 
+  consider the following aspects:
 
 1. What is the overarching narrative or story conveyed in the music video? How does it reflect the emotions and themes of your song?
 2. Who are the main characters or figures in your video, and how do their stories intertwine with the song's message?
@@ -41,7 +43,8 @@ async function main() {
 4. What are some key scenes in the music video? How do they relate to the storyline of the music video?
 
 Based on these considerations, generate exactly three questions that will help you flesh out the setting, characters, and narrative of your music video. Aim for questions that guide the creative direction and practical execution, such as figuring out specific scenes, is there a protagonist, how will the music video be shot etc
-Compile these questions into a JavaScript array of strings, structured as follows: ["question 1", "question 2", "question 3"]. Include only the array, start with [ and end with ].`;
+Compile these questions into a JavaScript array of strings, structured as follows: ["question 1", "question 2", "question 3"]. 
+Include only the array, start with [ and end with ].`;
 
   const videoQResponse = await gptPrompt(videoQPrompt, {
     max_tokens: 800,
