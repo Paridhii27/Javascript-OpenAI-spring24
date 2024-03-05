@@ -1,11 +1,17 @@
 import { ask, say } from "../shared/cli.js";
 import { gptPrompt } from "../shared/openai.js";
 
+import {
+  Checkbox,
+  prompt,
+} from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+
 main();
 
 async function main() {
   //Start of the game
   say("Welcome to escape AI");
+
   //Defining the escape rooms
   const escRooms = [
     {
@@ -19,19 +25,21 @@ async function main() {
       keyfeature: "There are creepers and vines across the edges of the room.",
     },
   ];
+  const chosenRoom = await prompt([
+    {
+      name: "rooms",
+      message: "Select an escape room:",
+      type: Checkbox,
+      maxSelected: 1,
+      options: escRooms.map((room) => `${room.id}. ${room.name}`), //chatgpt based line of code
+    },
+  ]);
 
-  //Providing the escape rooms that are ready to be experienced
-  say("Choose an escape room adventure to enter:");
-  escRooms.forEach((room) => {
-    say(`${room.id}. ${room.name}`);
-  });
+  // Get the selected room ID
+  const selectedRoomId = parseInt(chosenRoom.rooms[0].split(".")[0]); //chatgpt based line of code
 
-  //Choosing which escape experience to enter
-  const selectedRoomId = await ask("Enter the number of your choice:");
-
-  const selectedRoom = escRooms.find(
-    (room) => room.id === parseInt(selectedRoomId)
-  );
+  // Find the selected room
+  const selectedRoom = escRooms.find((room) => room.id === selectedRoomId);
 
   //Checking if the player entered the escape room
   if (selectedRoom) {
@@ -69,15 +77,84 @@ async function generateRoomDesc(roomName) {
   return response;
 }
 
-//Objects based puzzle created by the data dungeon experts
 async function generateRoomInventory() {
-  const obj = await ask("State three objects you find in this room");
-  const objPrompt = `Create an easy encryption puzzle based on the ${obj} in the space. Give the user three guesses to solve the puzzle. Do not give scenario background as this is part of an escape room where the player must make inferences just based on the space.`;
-  const objResponse = await gptPrompt(objPrompt, {
-    max_tokens: 400,
+  // say("Welcome to Data Dungeon");
+  // say("In this escape AI adventure, you find yourself")
+  console.log(
+    "%cWelcome to Data Dungeon",
+    "color: white; background-color: #545aab; font-size: 25px; font-weight: bold;"
+  );
+  console.log(
+    "%cIn this escape AI adventure, you find yourself getting puzzled by AI. You must solve the AI generative puzzle in a limited number of attempts to escape. The objects around you help get hints to solve the puzzle.",
+    "color: green; font-weight: bold;"
+  );
+
+  // Ask the player to state three objects found in the room
+  const objects = await ask(
+    "Enter any three objects you see in this room (comma-separated):"
+  );
+
+  // Generate an encryption puzzle based on the objects provided by the player
+  const encryptionPuzzle = await generateEncryptionPuzzle(objects);
+  say("Here's your puzzle:");
+
+  // Display the encryption puzzle to the player
+  say(encryptionPuzzle);
+
+  // Allow the player three attempts to solve the puzzle
+  let remainingAttempts = 3;
+  let solved = false;
+  while (remainingAttempts > 0 && !solved) {
+    // Prompt the player to guess the solution
+    const guess = await ask(
+      `Guess the solution (${remainingAttempts} attempts remaining):`
+    );
+
+    // Check if the guess is correct
+    if (guess.toLowerCase() === encryptionPuzzle.toLowerCase()) {
+      say("Congratulations! You've solved the puzzle.");
+      solved = true;
+    } else {
+      say("Incorrect guess. Keep trying!");
+      remainingAttempts--;
+    }
+
+    console.log(
+      "%cFeeling trapped in the overwhelming age of AI.",
+      "color: #d0eb65; font-size: 20px; font-weight: bold;"
+    );
+  }
+
+  // Display a message if the player runs out of attempts
+  if (!solved) {
+    say(`You've run out of attempts. Better luck next time!`);
+
+    // Reveal the correct answer of the puzzle
+    const puzzleAnswer = await encryptionPuzzleAnswers(encryptionPuzzle);
+    say(`The correct answer of the puzzle is: "${puzzleAnswer}".`);
+  }
+}
+
+async function generateEncryptionPuzzle(objects) {
+  // Generate an encryption puzzle based on the objects provided
+  const puzzlePrompt = `Create a really easy encryption puzzle based on the objects: ${objects}. Limit the size of encryption to 6 letters maximum. The puzzle explanation should end in only a few sentences. Make sure the puzzle can be answered as a string output.`;
+  const puzzleResponse = await gptPrompt(puzzlePrompt, {
+    max_tokens: 300,
     temperature: 0.7,
   });
-  say(objResponse);
+
+  return puzzleResponse;
+}
+
+async function encryptionPuzzleAnswers(encryptionPuzzle) {
+  // Reveal the exact answer of the puzzle
+  const puzzleAnsPrompt = `Reveal the exact answer of the puzzle based on "${encryptionPuzzle}".`;
+  const puzzleAns = await gptPrompt(puzzleAnsPrompt, {
+    max_tokens: 100,
+    temperature: 0.4,
+  });
+
+  return puzzleAns;
 }
 
 // Racing to win the word based human vs cyborg game
@@ -85,6 +162,15 @@ async function generateCyborgWhispers() {
   //Tracking word score
   let cyborgScore = 0;
   let userScore = 0;
+
+  console.log(
+    "%cWelcome to Cyborg Whispers",
+    "color: white; background-color: #56587a; font-size: 25px; font-weight: bold;"
+  );
+  console.log(
+    "%cIn this escape AI adventure, you hear whispers of a cyborg who claims to have unlimited knowledge. So you both play a silly game of rhyming words. You say a word and then need to type out as many rhyming words to it as possible in a given amount of time. If the cyborg gets more rhyming words than you, you lose. Otherwise you escape their whispers.",
+    "color: #97e1f0; font-weight: bold;"
+  );
 
   // Generate a random word to begin the game
   const randomWord = await ask("Give a random word:");
