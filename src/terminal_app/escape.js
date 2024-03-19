@@ -10,7 +10,10 @@ main();
 
 async function main() {
   //Start of the game
-  say("Welcome to escape AI");
+  console.log(
+    "%cWelcome to escape AI",
+    "color: #b7b0eb; font-size: 25px; font-weight: bold;"
+  );
 
   //Defining the escape rooms
   const escRooms = [
@@ -54,8 +57,7 @@ async function main() {
     }
     //Cyborg Whispers
     else if (parseInt(selectedRoomId) == 282282) {
-      const whispers = await playCyborgWhispers();
-      // const whispers = await playWordChainGame();
+      const whispers = await generateCyborgWhispers();
       say(whispers);
     }
     //More rooms to come
@@ -73,7 +75,7 @@ async function main() {
 async function generateRoomDesc(roomName) {
   const prompt = `Generate a description for an escape room called ${roomName}. Include descriptions of what the space looks like and what is the players first clue to escaping the ${roomName}. It also must have the feature of ${roomName.keyfeature}`;
   const response = await gptPrompt(prompt, {
-    max_tokens: 5,
+    max_tokens: 100,
     temperature: 0.7,
   });
   return response;
@@ -82,10 +84,10 @@ async function generateRoomDesc(roomName) {
 async function generateRoomInventory() {
   console.log(
     "%cWelcome to Data Dungeon",
-    "color: white; background-color: #545aab; font-size: 25px; font-weight: bold;"
+    "color: white; background-color: #6bbfbb; font-size: 25px; font-weight: bold;"
   );
   console.log(
-    "%cIn this escape AI adventure, you find yourself getting puzzled by AI. You must solve the AI generative puzzle in a limited number of attempts to escape. The objects around you help get hints to solve the puzzle.",
+    "%cIn this escape AI adventure, you find yourself getting puzzled by AI. You must solve the AI generative puzzle in a limited number of attempts to escape. Look closely at the objects around you in order to find hints to solve the puzzle.",
     "color: green; font-weight: bold;"
   );
 
@@ -132,12 +134,20 @@ async function generateRoomInventory() {
     const normalizedPuzzleAnswer = escapeAns.toLowerCase(); // Assuming puzzleAnswer is a string
 
     if (normalizedGuess === normalizedPuzzleAnswer) {
-      say(
-        "The door creaks open, and a beam of sunlight floods the room. You've successfully escaped!"
+      console.log(
+        "%cThe door creaks open, and a beam of sunlight floods the room. You've successfully escaped!",
+        "color: red; font-weight: bold;"
       );
+      // say(
+      //   "The door creaks open, and a beam of sunlight floods the room. You've successfully escaped!"
+      // );
       solved = true;
     } else {
-      say("Nothing happens. The cipher remains unsolved. Keep trying!");
+      console.log(
+        "%cNothing happens. The cipher remains unsolved. Keep trying!.",
+        "color: red; font-weight: bold;"
+      );
+      // say("Nothing happens. The cipher remains unsolved. Keep trying!");
       remainingAttempts--;
     }
   }
@@ -181,7 +191,7 @@ async function generateEncryptionPuzzle(objects) {
 
 // Racing to win the word based human vs cyborg game
 
-async function playCyborgWhispers() {
+async function generateCyborgWhispers() {
   let cyborgScore = 0;
   let userScore = 0;
 
@@ -234,14 +244,26 @@ async function playCyborgWhispers() {
 
   // Determine if the player escapes
   if (userScore > cyborgScore) {
-    say(
-      "Woohoo! You successfully escaped the cyborg whispers. What books you have been reading!!"
+    console.log(
+      "%cWoohoo! You successfully escaped the cyborg whispers. What books you have been reading!!",
+      "color: #ceedd8; font-weight: bold;"
     );
+    // say(
+    //   "Woohoo! You successfully escaped the cyborg whispers. What books you have been reading!!"
+    // );
   } else if (userScore === cyborgScore) {
-    say("It's a tie! Are you a cyborg?");
-  } else {
-    say(
-      "The Cyborg beats you with its extensive vocabulary. Try again to escape its whispers."
+    console.log(
+      "%cIt's a tie! Are you a cyborg?",
+      "color: #faf882; font-weight: bold;"
     );
+    // say("It's a tie! Are you a cyborg?");
+  } else {
+    console.log(
+      "%cThe Cyborg beats you with its extensive vocabulary. Try again to escape its whispers.",
+      "color: #fa6689; font-weight: bold;"
+    );
+    // say(
+    //   "The Cyborg beats you with its extensive vocabulary. Try again to escape its whispers."
+    // );
   }
 }
