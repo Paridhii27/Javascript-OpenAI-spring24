@@ -31,6 +31,7 @@ async function main() {
       message: "Select an escape room:",
       type: Checkbox,
       maxSelected: 1,
+      listPointer: ">",
       options: escRooms.map((room) => `${room.id}. ${room.name}`), //chatgpt based line of code
     },
   ]);
@@ -53,7 +54,8 @@ async function main() {
     }
     //Cyborg Whispers
     else if (parseInt(selectedRoomId) == 282282) {
-      const whispers = await generateCyborgWhispers();
+      const whispers = await playCyborgWhispers();
+      // const whispers = await playWordChainGame();
       say(whispers);
     }
     //More rooms to come
@@ -71,15 +73,13 @@ async function main() {
 async function generateRoomDesc(roomName) {
   const prompt = `Generate a description for an escape room called ${roomName}. Include descriptions of what the space looks like and what is the players first clue to escaping the ${roomName}. It also must have the feature of ${roomName.keyfeature}`;
   const response = await gptPrompt(prompt, {
-    max_tokens: 200,
+    max_tokens: 5,
     temperature: 0.7,
   });
   return response;
 }
 
 async function generateRoomInventory() {
-  // say("Welcome to Data Dungeon");
-  // say("In this escape AI adventure, you find yourself")
   console.log(
     "%cWelcome to Data Dungeon",
     "color: white; background-color: #545aab; font-size: 25px; font-weight: bold;"
@@ -89,77 +89,99 @@ async function generateRoomInventory() {
     "color: green; font-weight: bold;"
   );
 
-  // Ask the player to state three objects found in the room
-  const objects = await ask(
-    "Enter any three objects you see in this room (comma-separated):"
-  );
+  const chooseObj = await prompt([
+    {
+      name: "object",
+      message:
+        "Select three objects you see in the room that you think are key to escaping :",
+      type: Checkbox,
+      maxSelected: 3,
+      listPointer: ">",
+      options: [
+        "book",
+        "mirror",
+        "torch",
+        "plate",
+        "recipes",
+        "frame",
+        "typewriter",
+        "radio",
+        "neon lamp",
+      ],
+    },
+  ]);
+
+  const objects = chooseObj.object;
 
   // Generate an encryption puzzle based on the objects provided by the player
-  const encryptionPuzzle = await generateEncryptionPuzzle(objects);
+  const { puzzleDescription, escapeAns } = await generateEncryptionPuzzle(
+    objects
+  );
   say("Here's your puzzle:");
-
-  // Display the encryption puzzle to the player
-  say(encryptionPuzzle);
+  // Display the cipher puzzle to the player
+  say(puzzleDescription);
 
   // Allow the player three attempts to solve the puzzle
   let remainingAttempts = 3;
   let solved = false;
   while (remainingAttempts > 0 && !solved) {
-    // Prompt the player to guess the solution
     const guess = await ask(
-      `Guess the solution (${remainingAttempts} attempts remaining):`
+      `Guess the solution (${remainingAttempts} attempts remaining). Please enter your answer as a single word or a sequence of numbers without spaces:`
     );
+    const normalizedGuess = guess.replace(/\s+/g, "").toLowerCase();
+    const normalizedPuzzleAnswer = escapeAns.toLowerCase(); // Assuming puzzleAnswer is a string
 
-    // Check if the guess is correct
-    if (guess.toLowerCase() === encryptionPuzzle.toLowerCase()) {
-      say("Congratulations! You've solved the puzzle.");
+    if (normalizedGuess === normalizedPuzzleAnswer) {
+      say(
+        "The door creaks open, and a beam of sunlight floods the room. You've successfully escaped!"
+      );
       solved = true;
     } else {
-      say("Incorrect guess. Keep trying!");
+      say("Nothing happens. The cipher remains unsolved. Keep trying!");
       remainingAttempts--;
     }
-
-    console.log(
-      "%cFeeling trapped in the overwhelming age of AI.",
-      "color: #d0eb65; font-size: 20px; font-weight: bold;"
-    );
   }
 
-  // Display a message if the player runs out of attempts
   if (!solved) {
-    say(`You've run out of attempts. Better luck next time!`);
-
-    // Reveal the correct answer of the puzzle
-    const puzzleAnswer = await encryptionPuzzleAnswers(encryptionPuzzle);
-    say(`The correct answer of the puzzle is: "${puzzleAnswer}".`);
+    say(
+      `It seems that the code is incorrect. The system is locking down. Now you're kind of trapped. Better luck next time.`
+    );
+    say(`The correct answer of the puzzle is: "${escapeAns}".`); // Provide the correct answer after the attempts run out
   }
 }
 
 async function generateEncryptionPuzzle(objects) {
   // Generate an encryption puzzle based on the objects provided
-  const puzzlePrompt = `Create a really easy encryption puzzle based on the objects: ${objects}. Limit the size of encryption to 6 letters maximum. The puzzle explanation should end in only a few sentences. Make sure the puzzle can be answered as a string output.`;
+  const puzzlePrompt = `Create an easy-to-solve cipher puzzle for a text based escape room adventure. The puzzle should involve three objects found within a room called "Data Dungeon". Use the following three objects: ${objects.join(
+    ", "
+  )}. Design the puzzle so each object conceals a part of the code or message. Combine these clues to form a straightforward answer that progresses the game. For instance, the objects might encode letters or numbers that, when put together, spell out a word or a numeric code. The puzzle explanation should end in only a few sentences.
+  The puzzle should be solvable via text input, concise, and intuitive, allowing players to deduce the answer from the provided clues easily.After describing the puzzle, clearly state "Solution:" followed by the answer.`;
   const puzzleResponse = await gptPrompt(puzzlePrompt, {
     max_tokens: 300,
     temperature: 0.7,
   });
 
-  return puzzleResponse;
+  const puzzleParts = puzzleResponse.split("Solution:");
+  const puzzleDescription = puzzleParts[0].trim();
+  const escapeAns = puzzleParts[1] ? puzzleParts[1].trim() : "";
+
+  return { puzzleDescription, escapeAns };
 }
 
-async function encryptionPuzzleAnswers(encryptionPuzzle) {
-  // Reveal the exact answer of the puzzle
-  const puzzleAnsPrompt = `Reveal the exact answer of the puzzle based on "${encryptionPuzzle}".`;
-  const puzzleAns = await gptPrompt(puzzleAnsPrompt, {
-    max_tokens: 100,
-    temperature: 0.4,
-  });
+// async function encryptionPuzzleAnswers(encryptionPuzzle) {
+//   // Reveal the exact answer of the puzzle
+//   const puzzleAnsPrompt = `Reveal the exact answer of the puzzle based on "${encryptionPuzzle}".`;
+//   const puzzleAns = await gptPrompt(puzzleAnsPrompt, {
+//     max_tokens: 100,
+//     temperature: 0.4,
+//   });
 
-  return puzzleAns;
-}
+//   return puzzleAns;
+// }
 
 // Racing to win the word based human vs cyborg game
-async function generateCyborgWhispers() {
-  //Tracking word score
+
+async function playCyborgWhispers() {
   let cyborgScore = 0;
   let userScore = 0;
 
@@ -168,58 +190,58 @@ async function generateCyborgWhispers() {
     "color: white; background-color: #56587a; font-size: 25px; font-weight: bold;"
   );
   console.log(
-    "%cIn this escape AI adventure, you hear whispers of a cyborg who claims to have unlimited knowledge. So you both play a silly game of rhyming words. You say a word and then need to type out as many rhyming words to it as possible in a given amount of time. If the cyborg gets more rhyming words than you, you lose. Otherwise you escape their whispers.",
+    "%cIn this escape AI adventure, you hear whispers of a cyborg who claims to have unlimited knowledge. So you both play a silly game of whispering rhyming words. You both get a word and need to think deeply and find as many rhymes as possible, whoever gets more wins. The machine goes first. If the machine wins, you accept defeat. Otherwise you escape their whispers.",
     "color: #97e1f0; font-weight: bold;"
   );
 
   // Generate a random word to begin the game
-  const randomWord = await ask("Give a random word:");
+  const randomWord = await ask("Give a random word: ");
 
-  // Function to start the timer
-  function startTimer() {
-    console.log("Timer started...");
-    setTimeout(() => {
-      console.log("Woohoo!");
-    }, 20000); // 20 seconds
-  }
-  // Start the timer
-  await startTimer();
-
-  // Prompt the user to provide rhyming words
-  const userRhymes = await ask(
-    `Quickly! Give as many rhyming words to "${randomWord}" as possible within 20 seconds:`
-  );
-
-  // Generate rhyming words using GPT-3
-  const wordsPrompt = `Generate as many rhyming words to "${randomWord}" as possible in 5 seconds. Keep a list of all the words generated. Print only the rhyming words.`;
+  // AI generates rhyming words
+  const wordsPrompt = `Generate as many rhyming words as possible for the word "${randomWord}".`;
   const wordsResponse = await gptPrompt(wordsPrompt, {
-    max_tokens: 60,
+    max_tokens: 100,
     temperature: 0.7,
   });
-  say(wordsResponse);
 
-  // Count the number of words generated by the user and the cyborg
-  const cyborgRhymes = wordsResponse.split("\n").filter(Boolean);
+  // List of rhyming words from the AI
+  const cyborgRhymes = wordsResponse
+    .split("\n")
+    .filter((word) => word.trim() !== "");
+
+  // Prompt the user to provide their rhyming words
+  const userResponse = await ask(
+    `Now, try to list as many rhyming words for "${randomWord}" as you can: `
+  );
+  const userRhymes = userResponse
+    .split(",")
+    .map((word) => word.trim())
+    .filter((word) => word !== "");
+
+  // Eliminate duplicates and count the number of unique rhyming words
+  const uniqueUserRhymes = [...new Set(userRhymes)];
+
+  // Display the AI's rhymes to the player for fairness
+  say(`The AI came up with these rhyming words: ${cyborgRhymes.join(", ")}`);
 
   // Calculate scores
   cyborgScore = cyborgRhymes.length;
-  userScore = userRhymes.split(" ").filter(Boolean).length;
+  userScore = uniqueUserRhymes.length;
 
   // Display the results
-  say(`Cyborg: ${cyborgScore} words`);
-  say(`You: ${userScore} words`);
+  say(`AI score: ${cyborgScore} rhymes`);
+  say(`Your score: ${userScore} unique rhymes`);
 
-  console.log("Words Response:", wordsResponse);
-  console.log("Cyborg Rhymes:", cyborgRhymes);
-
-  //Determine if the player escapes
-  if (cyborgScore > userScore) {
-    say("The Cyborg beats you so you must try again");
-  } else if (userScore > cyborgScore) {
-    say("Wow you've successfully escaped the cyborg whispers");
-  } else {
+  // Determine if the player escapes
+  if (userScore > cyborgScore) {
+    say(
+      "Woohoo! You successfully escaped the cyborg whispers. What books you have been reading!!"
+    );
+  } else if (userScore === cyborgScore) {
     say("It's a tie! Are you a cyborg?");
+  } else {
+    say(
+      "The Cyborg beats you with its extensive vocabulary. Try again to escape its whispers."
+    );
   }
-
-  return wordsResponse;
 }
