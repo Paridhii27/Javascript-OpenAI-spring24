@@ -35,12 +35,12 @@ async function main() {
       type: Checkbox,
       maxSelected: 1,
       listPointer: ">",
-      options: escRooms.map((room) => `${room.id}. ${room.name}`), //chatgpt based line of code
+      options: escRooms.map((room) => `${room.id}. ${room.name}`),
     },
   ]);
 
   // Get the selected room ID
-  const selectedRoomId = parseInt(chosenRoom.rooms[0].split(".")[0]); //chatgpt based line of code
+  const selectedRoomId = parseInt(chosenRoom.rooms[0].split(".")[0]);
 
   // Find the selected room
   const selectedRoom = escRooms.find((room) => room.id === selectedRoomId);
@@ -75,7 +75,7 @@ async function main() {
 async function generateRoomDesc(roomName) {
   const prompt = `Generate a description for an escape room called ${roomName}. Include descriptions of what the space looks like and what is the players first clue to escaping the ${roomName}. It also must have the feature of ${roomName.keyfeature}`;
   const response = await gptPrompt(prompt, {
-    max_tokens: 100,
+    max_tokens: 150,
     temperature: 0.7,
   });
   return response;
