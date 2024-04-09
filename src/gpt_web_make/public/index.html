@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Hello, Web GPT!</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-half">
+        <h3>Write the name of a found machine</h3>
+        <input id="name" type="text" placeholder="name of a machine" />
+        <h3>What is a key feature of this machine?</h3>
+        <input id="feature" type="text" placeholder="machine design feature" />
+        <br />
+        <br />
+        <button id="send" style="justify-content: center">
+          Tinker machine
+        </button>
+        <div id="output" class="left-half"></div>
+      </div>
+      <br />
+      <div class="right-half bg-gray-800 text-blue-200 font-sans">
+        <div class="p-4 bg-blue-900">
+          <input
+            id="prompt"
+            type="text"
+            placeholder="image generation prompt"
+            class="block rounded w-full py-2 px-4 text-black"
+          />
+        </div>
+        <div class="button-group">
+          <!-- New div for button group -->
+          <button
+            id="dalle"
+            class="mt-4 mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            openai Dall•e 3
+          </button>
+          <button
+            id="fal"
+            class="mt-4 mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            fal SD Cascade
+          </button>
+          <button
+            id="falfast"
+            class="mt-4 mr-16 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            fal SD Lightning
+          </button>
+
+          <button
+            id="makeprompt"
+            class="mt-4 bg-pink-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Make Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="output" class="p-4"></div>
+
+    <script>
+      const nameElement = document.getElementById("name");
+      const featuredElement = document.getElementById("feature");
+
+      const sendElement = document.getElementById("send");
+      sendElement.addEventListener("click", () => {
+        fetch(
+          `/api/gpt?name=${nameElement.value}&feature=${featuredElement.value}`
+        )
+          .then((response) => response.text())
+          .then((responseText) => {
+            const responseElement = document.createElement("p");
+            responseElement.innerText = responseText;
+            document.body.appendChild(responseElement);
+            const output = document.getElementById("output");
+            output.innerHTML = "";
+            output.appendChild(responseElement);
+          });
+      });
+
+      const promptElement = document.getElementById("prompt");
+      const dalleButton = document.getElementById("dalle");
+      dalleButton.addEventListener("click", () => {
+        const prompt = promptElement.value || "no prompt";
+        fetch(`/api/dalle?prompt=${prompt}`)
+          .then((response) => response.text())
+          .then((url) => {
+            const e = document.createElement("div");
+
+            e.innerHTML = `
+              <div class="mb-4">
+          <img class="output-image block" src="${url}" /> <!-- Add the output-image class here -->
+          <div class="output-image text-white w-1/2">${prompt}</div>
+          <div class="p-4 bg-red-500 text-white w-1/4">openai Dall•e 3</div>
+        </div>
+              `;
+            const output = document.getElementById("output");
+
+            output.insertBefore(e, output.firstChild);
+          });
+      });
+
+      const falButton = document.getElementById("fal");
+      falButton.addEventListener("click", () => {
+        fetch(`/api/fal?prompt=${promptElement.value}`)
+          .then((response) => response.text())
+          .then((url) => {
+            const e = document.createElement("div");
+
+            e.innerHTML = `
+              <div class="mb-4">
+             <img class="output-image block" src="${url}" /> <!-- Add the output-image class here -->
+            <div class="p-4 bg-gray-500 text-white w-1/2">${
+              promptElement.value || "no prompt"
+            }</div>
+            <div class="p-4 bg-red-500 text-white w-1/4">fal SD Cascade</div>
+            </div>
+              `;
+            const output = document.getElementById("output");
+
+            output.insertBefore(e, output.firstChild);
+          });
+      });
+
+      const falfastButton = document.getElementById("falfast");
+      falfastButton.addEventListener("click", () => {
+        fetch(`/api/falfast?prompt=${promptElement.value}`)
+          .then((response) => response.text())
+          .then((url) => {
+            const e = document.createElement("div");
+
+            e.innerHTML = `
+              <div class="mb-4">
+          <img class="output-image block" src="${url}" /> <!-- Add the output-image class here -->
+          <div class="p-4 bg-gray-500 text-white w-1/2">${
+            promptElement.value || "no prompt"
+          }</div>
+          <div class="p-4 bg-red-500 text-white w-1/4">fal SD Lightning</div>
+        </div>
+              `;
+            const output = document.getElementById("output");
+
+            output.insertBefore(e, output.firstChild);
+          });
+      });
+
+      const makepromptButton = document.getElementById("makeprompt");
+      makepromptButton.addEventListener("click", () => {
+        const style = [
+          "hyperrealistic",
+          "surreal",
+          "abstract",
+          "noir",
+          "cyberpunk",
+          "minimalist",
+        ];
+        const media = [
+          "photo",
+          "painting",
+          "sketch",
+          "sculpture",
+          "film still",
+        ];
+        const places = [
+          "Zoo",
+          "Icecream shop",
+          "Karaoke bar",
+          "Kindergarden",
+          "Coffee shop",
+          "meadow",
+          "atlantic ocean",
+          "amusement park",
+          "valley",
+          "post office",
+          "train station",
+          "grocery store",
+        ];
+
+        const verbs = [
+          "eating",
+          "drinking",
+          "sleeping",
+          "running",
+          "walking",
+          "flying",
+          "swimming",
+          "cycling",
+          "driving",
+          "sailing",
+          "hiking",
+          "climbing",
+        ];
+
+        promptElement.value = `${pick(style)} ${pick(media)} of a ${pick(
+          places
+        )} ${pick(verbs)}`;
+      });
+
+      function pick(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+    </script>
+  </body>
+</html>

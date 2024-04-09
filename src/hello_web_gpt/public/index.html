@@ -7,13 +7,23 @@
   </head>
   <body>
     <h1>Hello, Web GPT!</h1>
-    <input id="prompt" type="text" placeholder="prompt" />
-    <button id="send">send</button>
+
+    <h2>Enter your name:</h2>
+    <input id="name" type="text" placeholder="name" />
+    <h2>Enter where you're from:</h2>
+    <input id="location" type="text" placeholder="location" />
+
+    <button id="send">Generate Limerick</button>
+
     <script>
-      const promptElement = document.getElementById("prompt");
+      const nameElement = document.getElementById("name");
+      const locationElement = document.getElementById("location");
+
       const sendElement = document.getElementById("send");
       sendElement.addEventListener("click", () => {
-        fetch(`/api/gpt?prompt=${promptElement.value}`)
+        fetch(
+          `/api/gpt?name=${nameElement.value}&location=${locationElement.value}`
+        )
           .then((response) => response.text())
           .then((responseText) => {
             const responseElement = document.createElement("p");

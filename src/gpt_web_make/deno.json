@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "start": "deno run --allow-env --allow-net --allow-read=../.. gpt_web_make.js",
+    "dev": "deno run --allow-env --allow-net --allow-read=../.. --watch --no-clear-screen gpt_web_make.js"
+  }
+}

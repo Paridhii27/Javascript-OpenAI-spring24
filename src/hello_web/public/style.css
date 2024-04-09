@@ -1,0 +1,10 @@
+body {
+  font-size: 29px;
+  background-image: url(./background.png);
+}
+
+.web-container {
+  color: white;
+  opacity: 0.6;
+  margin: 5%;
+}
