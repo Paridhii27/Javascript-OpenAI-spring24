@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 body {
-  background-image: url(./groceryStore.png);
-  background-color: #d6d7c4;
+  background-image: url(./img/groceryStore.png);
+  background-color: rgba(255, 255, 255, 0.8);
+  /* background-color: #d6d7c4; */
   font-family: "Press Start 2P", cursive;
   color: rgb(17, 33, 26);
   font-size: 12px;
@@ -14,6 +15,10 @@ body {
 a {
   background-color: black;
   color: aliceblue;
+}
+
+h3 {
+  font-size: 12px;
 }
 
 #pages {
@@ -30,20 +35,39 @@ input {
 
 .container {
   display: flex;
-  background-color: aliceblue;
 }
 
 .left-half {
+  background-color: aliceblue;
   width: 80%;
-  padding: 10px;
+  padding: 3% 4%;
+  margin: 4%;
 }
 
 #send {
   font-family: inherit;
-  padding: 1%;
+  padding: 2%;
   position: relative;
   top: 10px;
-  right: 300px;
+  right: 400px;
+  background-color: rgb(159, 220, 219);
+}
+
+#send:hover {
+  background-color: rgb(241, 48, 34);
+  opacity: 90%;
+}
+
+.btn {
+  font-family: inherit;
+  padding: 2%;
+  position: relative;
+  top: 10px;
+  background-color: rgb(159, 220, 219);
+}
+
+.btn:hover {
+  background-color: rgb(110, 238, 204);
 }
 
 .right-half {
@@ -53,9 +77,15 @@ input {
 }
 
 #output {
-  width: 50%; /* Adjust the width as needed */
+  width: 90%; /* Adjust the width as needed */
   float: left; /* Float the output div to the left */
   margin-top: 5%;
+}
+
+#robot-head {
+  position: relative;
+  width: 10px;
+  top: -1000px;
 }
 
 #main {

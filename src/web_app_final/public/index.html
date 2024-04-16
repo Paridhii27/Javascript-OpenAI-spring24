@@ -9,10 +9,10 @@
   <body>
     <div class="container">
       <div class="right-half">
-        <img src="./robot.png" style="width:100%">
+        <img src="./img/robot.png" style="width:120%;">
       </div>
       <div class="left-half">
-        <h2>Welcome to Grandma's kitchen</h2>
+        <h2>Welcome to Grandma's kitchen 𓌉◯𓇋</h2>
 
         <!-- user inputs -->
         <h3>What cuisine of food would you like to have today?</h3>
@@ -36,7 +36,6 @@
         <br />
         <br />
         <button id="send" style="justify-content: center">Find A Recipe</button>
-        <a href="./terminal.html">Go off</a>
         <div id="output" class="left-half"></div>
       </div>
       <br />
@@ -58,13 +57,7 @@
         )
           .then((response) => response.text())
           .then((responseText) => {
-            window.location.href = `/output.html?response=${encodeURIComponent(responseText)}`;
-            // const responseElement = document.createElement("p");
-            // responseElement.innerText = responseText;
-            // document.body.appendChild(responseElement);
-            // const output = document.getElementById("output");
-            // output.innerHTML = "";
-            // output.appendChild(responseElement);
+            window.location.href = `/scene1.html?response=${encodeURIComponent(responseText)}`;
           });
       });
     </script>

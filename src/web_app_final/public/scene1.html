@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Output</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="right-half">
+        <img src="./img/robot.png" style="width: 120%" />
+      </div>
+      <div class="left-half">
+        <h1>Recipe Recommendation</h1>
+        <div id="output"></div>
+      </div>
+    </div>
+    <!-- <a href="./scene3.html">Go off</a> -->
+    <button class="btn" id="recipeBook">How to cook</button>
+    <button class="btn" id="recipeFunFacts">Learn about the dish</button>
+
+    <script>
+      // Retrieve the query parameter
+      const params = new URLSearchParams(window.location.search);
+      const responseText = params.get("response");
+
+      // Display the response
+      const outputElement = document.getElementById("output");
+      outputElement.innerText = responseText;
+
+      const recipeBook = document.getElementById("recipeBook");
+      recipeBook.addEventListener("click", () => {
+        window.location.href = "./scene2.html";
+      });
+
+      // const recipeFunFacts = document.getElementById("recipeFunFacts");
+      // recipeFunFacts.addEventListener("click", () => {
+      //   window.location.href = "./terminal.html"; // Navigate to terminal.html
+      // });
+    </script>
+  </body>
+</html>

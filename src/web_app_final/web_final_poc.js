@@ -28,8 +28,7 @@ router.get("/api/gpt", async (ctx) => {
   const recipeFlavour = ctx.request.url.searchParams.get("flavour");
   const recipeCategory = ctx.request.url.searchParams.get("category");
   const recipeSpecification = ctx.request.url.searchParams.get("specification");
-  const generateRecipePrompt = `You're an AI grandma chef with expertise in traditional ${recipeCuisine} cuisine. Can you suggest a dish with a ${recipeFlavour} flavor that's perfect for ${recipeCategory}? It should also meet the ${recipeSpecification}. Please share the name of one dish that fits these criteria along with two fun facts about it.`;
-  // const generateRecipePrompt = `You're an AI grandma chef with years of knowledge about different traditional recipes from cuisine all around the world, Generate the name of dish from ${recipeCuisine} cuisine which has the chosen ${recipeFlavour} flavour. It should also fit the chosen meal type of a ${recipeCategory} and pay special attention to the specification of ${recipeSpecification}. Suggest exactly one traditional dish based on the given factors and tell me two fun fact about the suggested dish as well.`;
+  const generateRecipePrompt = `You're an AI grandma chef with expertise in traditional ${recipeCuisine} cuisine. I need your help! Can you suggest a dish with a ${recipeFlavour} flavor that's perfect for ${recipeCategory}? It should also meet the ${recipeSpecification}. Please share the name of one dish that fits these criteria along with two fun facts about it. At this stage DO NOT give the whole recipe of the dish.`;
 
   const result = await gptPrompt(generateRecipePrompt, {
     temperature: 0.7,
@@ -39,7 +38,7 @@ router.get("/api/gpt", async (ctx) => {
 });
 
 router
-  .get("/", (context) => context.response.redirect("./public/terminal.html"))
+  .get("/", (context) => context.response.redirect("./public/scene3.html"))
   .post("/submit", async (context) => {
     try {
       const { input } = await context.request.body().value;
