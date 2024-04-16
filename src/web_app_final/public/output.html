@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Output</title>
+  </head>
+  <body>
+    <h1>Recipe Recommendation</h1>
+    <div id="output"></div>
+
+    <script>
+      // Retrieve the query parameter
+      const params = new URLSearchParams(window.location.search);
+      const responseText = params.get("response");
+
+      // Display the response
+      const outputElement = document.getElementById("output");
+      outputElement.innerText = responseText;
+    </script>
+  </body>
+</html>
