@@ -30,7 +30,18 @@ input {
   border: 2px solid black;
   outline: none;
   width: 60%;
-  height: 8%;
+  height: 5%;
+}
+
+.input-image {
+  font-family: inherit;
+  border: 2px solid black;
+  outline: none;
+  width: 20%;
+  height: 5%;
+  position: absolute;
+  top: 150px;
+  right: 20px;
 }
 
 .container {
@@ -50,13 +61,13 @@ input {
 
 #home-btn {
   position: absolute;
-  top: 20px; /* Adjust the distance from the top */
-  right: 20px; /* Adjust the distance from the right */
-  background-color: #ba6f6f; /* Background color */
-  color: #000000; /* Text color */
-  padding: 10px 20px; /* Padding */
-  border-radius: 5px; /* Border radius for rounded corners */
-  text-decoration: none; /* Remove underline */
+  top: 20px;
+  right: 20px;
+  background-color: #ba6f6f;
+  color: #000000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
 }
 
 #home-btn:hover {
@@ -103,15 +114,40 @@ input {
 }
 
 #output {
-  width: 90%; /* Adjust the width as needed */
-  float: left; /* Float the output div to the left */
+  width: 90%;
+  float: left;
   margin-top: 5%;
+}
+
+.output-image {
+  position: absolute;
+  top: 120px;
+  left: 500px;
+  width: 10vw;
+  border-radius: 5%;
 }
 
 #robot-head {
   position: relative;
   width: 10px;
   top: -1000px;
+}
+
+.large-button {
+  position: absolute;
+  top: 90px;
+  right: 20px;
+  font-family: inherit;
+  padding: 0.25rem 0.25rem;
+  background-color: #7a6fba;
+  color: #000000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.large-button:hover {
+  background-color: #f0f0f0;
 }
 
 /* body {

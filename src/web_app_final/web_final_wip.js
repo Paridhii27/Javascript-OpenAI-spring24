@@ -64,7 +64,8 @@ router.get("/api/gpt", async (ctx) => {
     max_tokens: 2,
   });
 
-  ctx.response.body = `${dishName} <br> ${twoFacts}`;
+  // ctx.response.body = `${dishName}<br>${twoFacts}`;
+  ctx.response.body = dishName + "\n" + twoFacts;
 });
 
 router.get("/api/gpt/recipe", async (ctx) => {
@@ -114,7 +115,8 @@ router.post("/aiRequest", async (ctx) => {
 
 // add the DALL•E route
 router.get("/api/dalle", async (ctx) => {
-  const prompt = ctx.request.url.searchParams.get("prompt");
+  // const prompt = ctx.request.url.searchParams.get("prompt");
+  const prompt = `Generate a pixelated image of a ${dishName}. `;
   console.log("Request received");
   console.log(prompt);
   const shortPrompt = prompt.slice(0, 1024);

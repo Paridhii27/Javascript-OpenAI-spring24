@@ -18,7 +18,9 @@
     </div>
     <!-- <a href="./scene3.html">Go off</a> -->
     <button class="btn" id="recipeBook">How to cook</button>
-    <button class="btn" id="recipeFunFacts">Learn about the dish</button>
+    <button onclick="sendInput()" class="btn" id="recipeFunFacts">
+      Learn about the dish
+    </button>
 
     <script>
       // Retrieve the query parameter
@@ -46,5 +48,6 @@
         window.location.href = "./scene4.html";
       });
     </script>
+    <script src="script.js"></script>
   </body>
 </html>

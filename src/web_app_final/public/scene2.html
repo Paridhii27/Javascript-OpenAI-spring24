@@ -13,6 +13,33 @@
     <title>Hello, Web GPT!</title>
   </head>
   <body>
+
+     <!-- image generation -->
+     <div class="right-half bg-gray-800 text-blue-200 font-sans">
+      <div class="button-group mt-4 mr-4 ml-auto"> <!-- Added ml-auto for margin-left:auto -->
+        <!-- New div for button group -->
+        <button
+          id="dalle"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded large-button"
+        >
+          Generate Image
+        </button>
+        <!-- <button
+          id="fal"
+          class="mt-4 mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          fal SD Cascade
+        </button>
+        <button
+          id="falfast"
+          class="mt-4 mr-16 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          fal SD Lightning
+        </button> -->
+      </div>
+    </div>
+  </div>
+
     <img id="head" src="./img/robot-head.png" style="width: 80%" />
     <div class="container-recipe">
       <div id="output" class="recipe-style"></div>
@@ -24,41 +51,17 @@
       <img src="./img/robot-mouth.png" style="width: 80%" />
       <div id="output" class="p-4"></div>
       <a href="index.html" id="home-btn">Homepage</a>
-      <!-- <br /> -->
 
-      <!-- image generation -->
-      <div class="right-half bg-gray-800 text-blue-200 font-sans">
-        <div class="p-4 bg-blue-900">
-          <input
-            id="prompt"
-            type="text"
-            placeholder="image generation prompt"
-            class="block rounded w-full py-2 px-4 text-black"
-          />
-        </div>
-        <div class="button-group">
-          <!-- New div for button group -->
-          <button
-            id="dalle"
-            class="mt-4 mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            openai Dall•e 3
-          </button>
-          <button
-            id="fal"
-            class="mt-4 mr-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            fal SD Cascade
-          </button>
-          <button
-            id="falfast"
-            class="mt-4 mr-16 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            fal SD Lightning
-          </button>
-        </div>
+      <div class="p-4 bg-blue-900">
+        <input
+          id="prompt"
+          class="input-image"
+          type="text"
+          placeholder="image generation prompt"
+          class="block rounded w-full py-2 px-4 text-black"
+        />
       </div>
-    </div>
+      <!-- <br /> -->
 
     <script>
       // Retrieve the query parameter
@@ -81,7 +84,6 @@
             e.innerHTML = `
               <div class="mb-4">
           <img class="output-image block" src="${url}" /> <!-- Add the output-image class here -->
-          <div class="output-image text-white w-1/2">${prompt}</div>
           <div class="p-4 bg-red-500 text-white w-1/4">openai Dall•e 3</div>
         </div>
               `;
