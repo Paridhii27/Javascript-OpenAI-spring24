@@ -61,7 +61,7 @@ router.get("/api/gpt", async (ctx) => {
 
   twoFacts = await gptPrompt(generateFacts, {
     temperature: 0.7,
-    max_tokens: 2,
+    max_tokens: 150,
   });
 
   // ctx.response.body = `${dishName}<br>${twoFacts}`;

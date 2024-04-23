@@ -33,7 +33,7 @@ input {
   height: 5%;
 }
 
-.input-image {
+#dalle {
   font-family: inherit;
   border: 2px solid black;
   outline: none;
