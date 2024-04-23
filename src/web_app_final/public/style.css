@@ -67,7 +67,7 @@ input {
 }
 
 .btn:hover {
-  background-color: rgb(110, 238, 204);
+  background-color: rgb(241, 48, 34);
 }
 
 .right-half {
@@ -88,6 +88,16 @@ input {
   top: -1000px;
 }
 
+/* body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 95vh;
+
+} */
+
 #main {
   /* display: none; */
   -webkit-user-select: none;
@@ -98,22 +108,51 @@ input {
   /* Standard syntax */
 }
 
+/* TERMINAL SETUP */
+/* TERMINAL SETUP */
+/* TERMINAL SETUP */
+/* TERMINAL SETUP */
+/* TERMINAL SETUP */
+
 .inter {
-  font-family: inherit;
-  left: 500px;
-  border: 5px double #9e9e9e9e;
-  padding: 10px;
+  border: 5px solid #db6666;
+  padding: 20px;
 }
 
 #commandDiv {
-  font-family: inherit;
-  height: 10vh;
-  width: 42vw;
+  height: 30vh;
+  width: 50vw;
   overflow-x: auto;
   overflow-y: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
   /* justify-content: center; */
 
-  background-color: rgb(39, 39, 39);
+  background-color: #060606;
+}
+
+/* TERMINAL COLOR */
+/* TERMINAL COLOR */
+/* TERMINAL COLOR */
+/* TERMINAL COLOR */
+/* TERMINAL COLOR */
+
+:root {
+  /* Text size */
+  --size: 1.2;
+}
+
+.terminal {
+  /* inside text color */
+  --color: #e6fdca;
+}
+
+.cmd {
+  /* user input color */
+  --color: #e6fdca;
+}
+
+.cmd-prompt {
+  /* blinking input color */
+  --color: #e6fdca;
 }

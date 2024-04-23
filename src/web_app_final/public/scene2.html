@@ -3,16 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css"
+    />
     <link rel="stylesheet" href="./style.css" />
     <title>Hello, Web GPT!</title>
   </head>
   <body>
     <img id="head" src="./img/robot-head.png" style="width: 80%" />
     <div class="container">
-      <div class="left-half">
-        <h2>How to cook</h2>
-      </div>
-      <br />
+      <div class="preloader visually-hidden"></div>
+      <div class="inter" id="commandDiv"></div>
+      <!-- <div class="left-half"> -->
+      <!-- <h2>How to cook</h2> -->
+
+      <script src="script.js"></script>
+      <!-- </div> -->
+      <!-- <br /> -->
 
       <!-- image generation -->
       <div class="right-half bg-gray-800 text-blue-200 font-sans">

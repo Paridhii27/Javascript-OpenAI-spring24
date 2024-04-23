@@ -31,15 +31,23 @@ const chalk = new Chalk({ level: 1 });
 //Create a web server
 const app = new Application();
 const router = new Router();
-
+let recipeCuisine, recipeFlavour, recipeCategory, recipeSpecification;
 // API routes
 router.get("/api/gpt", async (ctx) => {
-  const recipeCuisine = ctx.request.url.searchParams.get("cuisine");
-  const recipeFlavour = ctx.request.url.searchParams.get("flavour");
-  const recipeCategory = ctx.request.url.searchParams.get("category");
-  const recipeSpecification = ctx.request.url.searchParams.get("specification");
-  const generateRecipePrompt = `You're an AI grandma chef with expertise in traditional ${recipeCuisine} cuisine. I need your help! Can you suggest a dish with a ${recipeFlavour} flavor that's perfect for ${recipeCategory}? It should also meet the ${recipeSpecification}. Please share the name of one dish that fits these criteria along with two fun facts about it. At this stage DO NOT give the whole recipe of the dish.`;
-
+  recipeCuisine = ctx.request.url.searchParams.get("cuisine");
+  recipeFlavour = ctx.request.url.searchParams.get("flavour");
+  recipeCategory = ctx.request.url.searchParams.get("category");
+  recipeSpecification = ctx.request.url.searchParams.get("specification");
+  // const generateRecipePrompt = `You're an AI grandma chef with expertise in traditional ${recipeCuisine} cuisine. I need your help! Can you suggest a dish with a ${recipeFlavour} flavor that's perfect for ${recipeCategory}? It should also meet the ${recipeSpecification}. Please share the name of one dish that fits these criteria along with two fun facts about it. At this stage DO NOT give the whole recipe of the dish.`;
+  const generateRecipePrompt = `
+  You are a grandma who is a very good cook with expertise in traditional ${recipeCuisine} cuisine.
+  
+  Please respond with ONLY the following:
+  1. Name of the dish with the flavor: ${recipeFlavour}, that's perfect for catagory: ${recipeCategory}, and meeting the specification: ${recipeSpecification}. 
+  2. Two fun facts about this dish 
+  
+  DO NOT provide the whole recipe of the dish
+  `;
   const result = await gptPrompt(generateRecipePrompt, {
     temperature: 0.7,
     max_tokens: 150,
@@ -62,6 +70,29 @@ router.get("/api/gpt", async (ctx) => {
 //       };
 //     }
 //   });
+
+router.post("/aiRequest", async (ctx) => {
+  console.log("--START /aiRequest");
+  try {
+    const body = ctx.request.body();
+    let data = await body.value;
+    let askPrompt = data.input;
+
+    const result = await gptPrompt(askPrompt, {
+      temperature: 0.7,
+      max_tokens: 150,
+    });
+
+    ctx.response.status = 200; // OK
+    ctx.response.body = { ai: result };
+  } catch (error) {
+    console.error("Error:", error);
+    context.response.status = 500;
+    context.response.body = {
+      error: "Failed to generate output. Please try again.",
+    };
+  }
+});
 
 // add the DALL•E route
 router.get("/api/dalle", async (ctx) => {
