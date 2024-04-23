@@ -37,6 +37,32 @@ input {
   display: flex;
 }
 
+.container-recipe {
+  display: flex;
+  background-color: aliceblue;
+  margin-left: 10%;
+  padding: 2%;
+  width: 50vw;
+
+  height: 300px;
+  overflow-y: auto;
+}
+
+#home-btn {
+  position: absolute;
+  top: 20px; /* Adjust the distance from the top */
+  right: 20px; /* Adjust the distance from the right */
+  background-color: #ba6f6f; /* Background color */
+  color: #000000; /* Text color */
+  padding: 10px 20px; /* Padding */
+  border-radius: 5px; /* Border radius for rounded corners */
+  text-decoration: none; /* Remove underline */
+}
+
+#home-btn:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+}
+
 .left-half {
   background-color: aliceblue;
   width: 80%;

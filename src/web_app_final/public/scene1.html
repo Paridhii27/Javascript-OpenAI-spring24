@@ -31,7 +31,14 @@
 
       const recipeBook = document.getElementById("recipeBook");
       recipeBook.addEventListener("click", () => {
-        window.location.href = "./scene2.html";
+        fetch(`/api/gpt/recipe`)
+          .then((response) => response.text())
+          .then((responseText) => {
+            window.location.href = `/scene2.html?response=${encodeURIComponent(
+              responseText
+            )}`;
+          });
+        // window.location.href = "./scene2.html";
       });
 
       const recipeFunFacts = document.getElementById("recipeFunFacts");

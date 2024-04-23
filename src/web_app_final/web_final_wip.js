@@ -32,44 +32,62 @@ const chalk = new Chalk({ level: 1 });
 const app = new Application();
 const router = new Router();
 let recipeCuisine, recipeFlavour, recipeCategory, recipeSpecification;
-// API routes
+
+let dishName, twoFacts, recipeSteps;
+
 router.get("/api/gpt", async (ctx) => {
   recipeCuisine = ctx.request.url.searchParams.get("cuisine");
   recipeFlavour = ctx.request.url.searchParams.get("flavour");
   recipeCategory = ctx.request.url.searchParams.get("category");
   recipeSpecification = ctx.request.url.searchParams.get("specification");
-  // const generateRecipePrompt = `You're an AI grandma chef with expertise in traditional ${recipeCuisine} cuisine. I need your help! Can you suggest a dish with a ${recipeFlavour} flavor that's perfect for ${recipeCategory}? It should also meet the ${recipeSpecification}. Please share the name of one dish that fits these criteria along with two fun facts about it. At this stage DO NOT give the whole recipe of the dish.`;
-  const generateRecipePrompt = `
+
+  const generateDishName = `
+  In traditional ${recipeCuisine} cuisine, please generate ONLY THE NAME of the dish, with the following requirements:
+  A dish with the flavor: ${recipeFlavour}, that's perfect for catagory: ${recipeCategory}, and meeting the specification: ${recipeSpecification}.
+  DO NOT provide the whole recipe of the dish,
+  ONLY provide the NAME of the dish, it should be WITHIN five word only
+  `;
+
+  dishName = await gptPrompt(generateDishName, {
+    temperature: 1,
+    max_tokens: 10,
+  });
+
+  const generateFacts = `
   You are a grandma who is a very good cook with expertise in traditional ${recipeCuisine} cuisine.
-  
-  Please respond with ONLY the following:
-  1. Name of the dish with the flavor: ${recipeFlavour}, that's perfect for catagory: ${recipeCategory}, and meeting the specification: ${recipeSpecification}. 
-  2. Two fun facts about this dish 
-  
+  With this dish name: ${dishName}, please respond ONLY two short fun facts about this dish
   DO NOT provide the whole recipe of the dish
   `;
-  const result = await gptPrompt(generateRecipePrompt, {
+
+  twoFacts = await gptPrompt(generateFacts, {
     temperature: 0.7,
-    max_tokens: 150,
+    max_tokens: 2,
   });
-  ctx.response.body = result;
+
+  ctx.response.body = `${dishName} <br> ${twoFacts}`;
 });
 
-// router
-//   .get("/", (context) => context.response.redirect("./public/index.html"))
-//   .post("/submit", async (context) => {
-//     try {
-//       const { input } = await context.request.body().value;
-//       const gptResponse = await gptPrompt(input);
-//       context.response.body = { gpt: gptResponse };
-//     } catch (error) {
-//       console.error("Error:", error);
-//       context.response.status = 500;
-//       context.response.body = {
-//         error: "Failed to generate output. Please try again.",
-//       };
-//     }
-//   });
+router.get("/api/gpt/recipe", async (ctx) => {
+  const generateRecipe = `
+    Generate the step-by-step recipe to make ${dishName}. 
+    Please respond with ONLY the following:
+    1. Ingredients (list all the ingredients required):
+    2. Steps to make the dish (provide concise steps for preparing the dish):
+    - Start with [step 1].
+    - Then [step 2].
+    - Next, [step 3].
+    - Finally, [step 4].
+    Please make sure each step is described briefly. 
+    Keep the instructions clear and easy to follow.
+`;
+
+  recipeSteps = await gptPrompt(generateRecipe, {
+    temperature: 1,
+    max_tokens: 300,
+  });
+
+  ctx.response.body = recipeSteps;
+});
 
 router.post("/aiRequest", async (ctx) => {
   console.log("--START /aiRequest");
@@ -160,6 +178,22 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(staticServer);
 
-console.log(chalk.green("\nListening on http://localhost:8000"));
+console.log(chalk.green("\nListening on http://localhost:8001"));
 
-await app.listen({ port: 8000, signal: createExitSignal() });
+await app.listen({ port: 8001, signal: createExitSignal() });
+
+// router
+//   .get("/", (context) => context.response.redirect("./public/index.html"))
+//   .post("/submit", async (context) => {
+//     try {
+//       const { input } = await context.request.body().value;
+//       const gptResponse = await gptPrompt(input);
+//       context.response.body = { gpt: gptResponse };
+//     } catch (error) {
+//       console.error("Error:", error);
+//       context.response.status = 500;
+//       context.response.body = {
+//         error: "Failed to generate output. Please try again.",
+//       };
+//     }
+//   });

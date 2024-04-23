@@ -14,14 +14,16 @@
   </head>
   <body>
     <img id="head" src="./img/robot-head.png" style="width: 80%" />
-    <div class="container">
-      <div class="preloader visually-hidden"></div>
-      <div class="inter" id="commandDiv"></div>
+    <div class="container-recipe">
+      <div id="output" class="recipe-style"></div>
       <!-- <div class="left-half"> -->
       <!-- <h2>How to cook</h2> -->
 
       <script src="script.js"></script>
-      <!-- </div> -->
+      </div>
+      <img src="./img/robot-mouth.png" style="width: 80%" />
+      <div id="output" class="p-4"></div>
+      <a href="index.html" id="home-btn">Homepage</a>
       <!-- <br /> -->
 
       <!-- image generation -->
@@ -57,30 +59,15 @@
         </div>
       </div>
     </div>
-    <img src="./img/robot-mouth.png" style="width: 80%" />
-    <a href="index.html">Homepage</a>
-    <div id="output" class="p-4"></div>
 
     <script>
-      const cuisineName = document.getElementById("cuisine");
-      const flavourName = document.getElementById("flavour");
-      const categoryName = document.getElementById("category");
+      // Retrieve the query parameter
+      const params = new URLSearchParams(window.location.search);
+      const responseText = params.get("response");
 
-      const sendElement = document.getElementById("send");
-      sendElement.addEventListener("click", () => {
-        fetch(
-          `/api/gpt?cuisine=${cuisineName.value}&flavour=${flavourName.value}&category=${categoryName.value}`
-        )
-          .then((response) => response.text())
-          .then((responseText) => {
-            const responseElement = document.createElement("p");
-            responseElement.innerText = responseText;
-            document.body.appendChild(responseElement);
-            const output = document.getElementById("output");
-            output.innerHTML = "";
-            output.appendChild(responseElement);
-          });
-      });
+      // Display the response
+      const outputElement = document.getElementById("output");
+      outputElement.innerText = responseText;
 
       const promptElement = document.getElementById("prompt");
       const dalleButton = document.getElementById("dalle");
