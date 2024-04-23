@@ -9,15 +9,15 @@ import { createExitSignal, staticServer } from "../shared/server.ts";
 
 import { Chalk } from "npm:chalk@5";
 
-//tell the shared library code to log as much as possible
+// tell the shared library code to log as much as possible
 log.setLogLevel(log.LogLevel.DEBUG);
 
 // Change the current working directory to the directory of this script
 // This is necessary to serve static files with the correct path even
 // when the script is executed from a different directory
-// Deno.chdir(new url(".", import.meta.url).pathname);
+Deno.chdir(new URL(".", import.meta.url).pathname);
 // log the current working directory with friendly message
-// console.log(`Current working directory: ${Deno.cwd()}`);
+console.log(`Current working directory: ${Deno.cwd()}`);
 
 const env = loadEnv();
 if (!env.FAL_API_KEY) log.warn("No FAL_API_KEY in .env file");
@@ -47,21 +47,21 @@ router.get("/api/gpt", async (ctx) => {
   ctx.response.body = result;
 });
 
-router
-  .get("/", (context) => context.response.redirect("./public/scene3.html"))
-  .post("/submit", async (context) => {
-    try {
-      const { input } = await context.request.body().value;
-      const gptResponse = await gptPrompt(input);
-      context.response.body = { gpt: gptResponse };
-    } catch (error) {
-      console.error("Error:", error);
-      context.response.status = 500;
-      context.response.body = {
-        error: "Failed to generate output. Please try again.",
-      };
-    }
-  });
+// router
+//   .get("/", (context) => context.response.redirect("./public/index.html"))
+//   .post("/submit", async (context) => {
+//     try {
+//       const { input } = await context.request.body().value;
+//       const gptResponse = await gptPrompt(input);
+//       context.response.body = { gpt: gptResponse };
+//     } catch (error) {
+//       console.error("Error:", error);
+//       context.response.status = 500;
+//       context.response.body = {
+//         error: "Failed to generate output. Please try again.",
+//       };
+//     }
+//   });
 
 // add the DALL•E route
 router.get("/api/dalle", async (ctx) => {

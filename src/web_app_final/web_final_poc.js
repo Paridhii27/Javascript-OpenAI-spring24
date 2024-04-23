@@ -1,6 +1,6 @@
 import * as fal from "npm:@fal-ai/serverless-client";
 import { loadEnv } from "../shared/util.ts";
-import * as log from "../shared/logger.ts";
+// import * as log from "../shared/logger.ts";
 
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { gptPrompt } from "../shared/openai.ts";
@@ -44,7 +44,7 @@ router.get("/api/gpt", async (ctx) => {
 });
 
 router
-  .get("/", (context) => context.response.redirect("./public/scene3.html"))
+  .get("/", (context) => context.response.redirect("./public/index.html"))
   .post("/submit", async (context) => {
     try {
       const { input } = await context.request.body().value;
