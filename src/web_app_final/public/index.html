@@ -4,55 +4,86 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <title>Hello, Web GPT!</title>
+    <title>Cookbook byte</title>
   </head>
   <body>
     <div class="container">
       <div class="right-half">
-        <img src="./img/robot.png" style="width:120%;">
-      </div>
-      <div class="left-half">
-        <h2>Welcome to Grandma's kitchen 𓌉◯𓇋</h2>
+        <!-- <img src="./img/robot.png" style="width:120%;"> -->
+        <img class="topbar" src="./assets/UI/inputs.png">
+        <div class="user-inputs-container">
+            <h1>Welcome to Grandma's Cookbook Byte</h1>
 
-        <!-- user inputs -->
-        <h3>What cuisine of food would you like to have today?</h3>
-        <input id="cuisine" type="text" placeholder="cuisine" />
-        <h3>
-          What is the flavour profile of the food? [spicy/ sweet / sour/ salty/
-          bitter]
-        </h3>
-        <!-- <div class="custom-select" style="width:200px;">
-          <select id="flavour">
-            <option value="0">Select flavour:</option>
-            <option value="1">spicy</option>
-            <option value="2">sweet</option>
-            <option value="3">sour</option>
-            <option value="4">salty</option>
-            <option value="5">bitter</option>
-          </select>
-        </div> -->
+            <!-- user inputs -->
+            <h3>What cuisine of food would you like to have today?
+              [Japanese/ Chinese / British ...]
+            </h3>
+            <input id="cuisine" type="text" placeholder="cuisine" />
+            <h3>
+              What is the flavour profile?  
+              [spicy/ sweet / sour/ salty/ bitter]
+            </h3>
+            <!-- <div class="custom-select" style="width:200px;">
+              <select id="flavour">
+                <option value="0">Select flavour:</option>
+                <option value="1">spicy</option>
+                <option value="2">sweet</option>
+                <option value="3">sour</option>
+                <option value="4">salty</option>
+                <option value="5">bitter</option>
+              </select>
+            </div> -->
 
-        <input id="flavour" type="text" placeholder="flavour" />
-        <h3>
-          Let's narrow it down. Are you leaning towards something to drink,
-          something snack-sized, or a full meal?
-        </h3>
-        <input id="category" type="text" placeholder="meal category" />
+            <input id="flavour" type="text" placeholder="flavour" />
+            <h3>
+              Let's narrow it down. what is your ideal meal category?
+              [drink/ snack / meal...]
+            </h3>
+            <input id="category" type="text" placeholder="meal category" />
 
-        <h3>
-          Any other specification?
-        </h3>
-        <input id="specification" type="text" placeholder="specification" />
-
-        <br />
-        <br />
-        <button id="send" style="justify-content: center">Find A Recipe</button>
+            <h3>
+              Any other specification?
+              [Dietary restrictions]
+            </h3>
+            <input id="specification" type="text" placeholder="specification" />
+            <br />
+        </div>
+        <div class="button-container">
+          <br />
+          <button id="sendRecipe" style="justify-content: center">Generate Recipe</button>
+          <br />
+        </div>
         <!-- <div id="output" class="left-half"></div> -->
       </div>
-      <br />
-        
+      
+      <div class="left-half">
+          <div class="suggested-recipe">
+            <img class="topbar" src="./assets/UI/recipe.png">
+          <div id="outputRecipe">
+            <p></p>
+          </div>
+        </div>
+        <div class="generated-img">
+          <img class="topbar" src="./assets/UI/imgGen.png">
+          <br />
+          <div id="outputImg">
+           <P>Still working on this feature</P>
+          </div>
+          <div class="button-container">
+            <button id="sendImg" style="justify-content: center">Generate Image</button>
+        </div>
+          <br />
       </div>
+      <button id="nextPage" style="justify-content: center">Next Page</button>
+      <!-- <a href="./scene3.html">Go off</a> -->
+      <!-- <button class="btn" id="recipeBook">How to cook</button>
+      <button onclick="sendInput()" class="btn" id="recipeFunFacts">
+        Learn about the dish
+      </button> -->
     </div>
+  </div>
+</div>
+
     <!-- <div id="output" class="p-4"></div> -->
 
     <script>
@@ -60,17 +91,39 @@
       const flavourName = document.getElementById("flavour");
       const categoryName = document.getElementById("category");
       const specificationName = document.getElementById("specification");
-
-      const sendElement = document.getElementById("send");
-      sendElement.addEventListener("click", () => {
+    
+      const sendRecipeButton = document.getElementById("sendRecipe");
+    
+      sendRecipeButton.addEventListener("click", () => {
         fetch(
           `/api/gpt?cuisine=${cuisineName.value}&flavour=${flavourName.value}&category=${categoryName.value}&specification=${specificationName.value}`
         )
           .then((response) => response.text())
           .then((responseText) => {
-            window.location.href = `/scene1.html?response=${encodeURIComponent(responseText)}`;
+            // Display the response
+            const outputElement = document.getElementById("outputRecipe");
+            outputElement.innerText = responseText;
           });
       });
+
+      // const recipeBook = document.getElementById("nextPage");
+      // recipeBook.addEventListener("click", () => {
+      //   fetch(`/api/gpt/recipe`)
+      //     .then((response) => response.text())
+      //     .then((responseText) => {
+      //       window.location.href = `/recipe.html?response=${encodeURIComponent(
+      //         responseText
+      //       )}`;
+      //     });
+        // window.location.href = "./scene2.html";
+      // });
+
+      const nextPage = document.getElementById("nextPage");
+      nextPage.addEventListener("click", () => {
+        window.location.href = "./terminal.html";
+      });
     </script>
+    
+    <script src="script.js"></script>
   </body>
 </html>

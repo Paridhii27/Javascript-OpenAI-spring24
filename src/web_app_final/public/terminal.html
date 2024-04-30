@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="terminal-container">
+      <div class="preloader visually-hidden"></div>
+      <div class="recipe-steps-chat">
+        <img class="topbar" src="./assets/UI/steps.png" />
+        <div class="interLeft" id="commandDivLeft"></div>
+      </div>
+      <div class="recipe-quiz">
+        <img class="topbar" src="./assets/UI/quiz.png" />
+        <div class="interRight" id="commandDivRight"></div>
+      </div>
+    </div>
+    <button id="prevPage" style="justify-content: center">Prev Page</button>
+
+    <!-- <script src="script.js"></script> -->
+    <script>
+      const nextPage = document.getElementById("prevPage");
+      nextPage.addEventListener("click", () => {
+        window.location.href = "./index.html";
+      });
+    </script>
+    <script src="script-terminal.js"></script>
+  </body>
+</html>
