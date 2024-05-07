@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <title>Cookbook byte</title>
   </head>
   <body>
@@ -23,16 +24,6 @@
               What is the flavour profile?  
               [spicy/ sweet / sour/ salty/ bitter]
             </h3>
-            <!-- <div class="custom-select" style="width:200px;">
-              <select id="flavour">
-                <option value="0">Select flavour:</option>
-                <option value="1">spicy</option>
-                <option value="2">sweet</option>
-                <option value="3">sour</option>
-                <option value="4">salty</option>
-                <option value="5">bitter</option>
-              </select>
-            </div> -->
 
             <input id="flavour" type="text" placeholder="flavour" />
             <h3>
@@ -59,7 +50,7 @@
       <div class="left-half">
           <div class="suggested-recipe">
             <img class="topbar" src="./assets/UI/recipe.png">
-          <div id="outputRecipe">
+            <div id="outputRecipe">
             <p></p>
           </div>
         </div>
@@ -67,11 +58,12 @@
           <img class="topbar" src="./assets/UI/imgGen.png">
           <br />
           <div id="outputImg">
-           <P>Still working on this feature</P>
+           <P id="loadingMessage"></P>
           </div>
           <div class="button-container">
             <button id="sendImg" style="justify-content: center">Generate Image</button>
         </div>
+        <div id="output" class="p-4"></div>
           <br />
       </div>
       <button id="nextPage" style="justify-content: center">Next Page</button>
@@ -93,8 +85,11 @@
       const specificationName = document.getElementById("specification");
     
       const sendRecipeButton = document.getElementById("sendRecipe");
-    
+      const outputElement = document.getElementById("outputRecipe");
+
       sendRecipeButton.addEventListener("click", () => {
+        outputElement.innerText = "Loading...";
+
         fetch(
           `/api/gpt?cuisine=${cuisineName.value}&flavour=${flavourName.value}&category=${categoryName.value}&specification=${specificationName.value}`
         )
@@ -103,27 +98,69 @@
             // Display the response
             const outputElement = document.getElementById("outputRecipe");
             outputElement.innerText = responseText;
-          });
+          })
+          .catch((error) => {
+          // Display error message if fetch fails
+           outputElement.innerText = "Error: " + error.message;
+        });
       });
 
-      // const recipeBook = document.getElementById("nextPage");
-      // recipeBook.addEventListener("click", () => {
-      //   fetch(`/api/gpt/recipe`)
-      //     .then((response) => response.text())
-      //     .then((responseText) => {
-      //       window.location.href = `/recipe.html?response=${encodeURIComponent(
-      //         responseText
-      //       )}`;
-      //     });
-        // window.location.href = "./scene2.html";
-      // });
+      const dalleButton = document.getElementById("sendImg");
+      const loadingMessage = document.getElementById("loadingMessage");
+
+      dalleButton.addEventListener("click", () => {
+        loadingMessage.innerText = "Loading...";
+        loadingMessage.style.display = "block";
+        const prompt = `Generate a pixelated image of a pizza.`;
+        fetch(`/api/dalle?prompt=${prompt}`)
+              .then((response) => response.text())
+              .then((url) => {
+
+                loadingMessage.style.display = "none";
+                const e = document.createElement("div");
+
+                e.innerHTML = `
+                <div class="mb-4" >
+                  <img class="block" src="${url}" style="width: 10vw; height: 10vh; display: block; margin: auto;" />
+                </div>
+                `;
+                const output = document.getElementById("outputImg");
+
+                output.insertBefore(e, output.firstChild);
+        })
+        .catch((error) => {
+
+            loadingMessage.style.display = "none";
+            console.error("Error:", error);
+        });
+});
+
 
       const nextPage = document.getElementById("nextPage");
       nextPage.addEventListener("click", () => {
-        window.location.href = "./terminal.html";
+        // fetchDataAndGenerateRecipe();
+        const recipeName = `Strawberry Lemonade`;
+        fetch(
+          `/api/gpt?cuisine=${cuisineName.value}&flavour=${flavourName.value}&category=${categoryName.value}&specification=${specificationName.value}`
+        )
+        .then((response) => response.text())
+          .then((responseText) => {
+            // const dishName = data.dishName;
+            const [dishName] = responseText.split("\n");
+            console.log("Dish Name:", dishName);
+            localStorage.setItem('dishName', dishName);
+            window.location.href = "./terminal.html";
+            // const recipeName = dishName;
+            // console.log("Recipe Name:", recipeName);
+            // generateRecipe(recipeName);
+            // generateQuiz(recipeName);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
       });
     </script>
-    
-    <script src="script.js"></script>
+    <script src="script-terminal.js"></script>
   </body>
 </html>

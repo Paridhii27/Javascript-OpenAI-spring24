@@ -35,70 +35,6 @@ let recipeCuisine, recipeFlavour, recipeCategory, recipeSpecification;
 
 let dishName, twoFacts, recipeSteps;
 
-// Shared function to generate dishName
-// async function generateDishName(
-//   recipeCuisine,
-//   recipeFlavour,
-//   recipeCategory,
-//   recipeSpecification
-// ) {
-//   const generateDishName = `
-//     In traditional ${recipeCuisine} cuisine, please generate ONLY THE NAME of the dish, with the following requirements:
-//     A dish with the flavor: ${recipeFlavour}, that's perfect for catagory: ${recipeCategory}, and meeting the specification: ${recipeSpecification}.
-//     DO NOT provide the whole recipe of the dish,
-//     ONLY provide the NAME of the dish, it should be WITHIN five word only
-//     `;
-
-//   return await gptPrompt(generateDishName, {
-//     temperature: 1,
-//     max_tokens: 10,
-//   });
-// }
-
-// // Route to get only the dishName
-// router.get("/api/gpt/dishName", async (ctx) => {
-//   const { cuisine, flavour, category, specification } =
-//     ctx.request.url.searchParams;
-
-//   const dishName = await generateDishName(
-//     cuisine,
-//     flavour,
-//     category,
-//     specification
-//   );
-
-//   ctx.response.body = dishName;
-// });
-
-// // Route to get both dishName and twoFacts
-// router.get("/api/gpt", async (ctx) => {
-//   const { cuisine, flavour, category, specification } =
-//     ctx.request.url.searchParams;
-
-//   const dishName = await generateDishName(
-//     cuisine,
-//     flavour,
-//     category,
-//     specification
-//   );
-
-//   const generateFacts = `
-//   You are a grandma who is a very good cook with expertise in traditional ${cuisine} cuisine.
-//   With this dish name: ${dishName}, please respond ONLY two short fun facts about this dish
-//   DO NOT provide the whole recipe of the dish
-//   `;
-
-//   const twoFacts = await gptPrompt(generateFacts, {
-//     temperature: 0.7,
-//     max_tokens: 150,
-//   });
-
-//   // Concatenate dishName and twoFacts into a single string
-//   const dishNameAndFacts = `${dishName}\n${twoFacts}`;
-
-//   ctx.response.body = { dishNameAndFacts, dishName };
-// });
-
 router.get("/api/gpt", async (ctx) => {
   recipeCuisine = ctx.request.url.searchParams.get("cuisine");
   recipeFlavour = ctx.request.url.searchParams.get("flavour");
@@ -117,9 +53,6 @@ router.get("/api/gpt", async (ctx) => {
     max_tokens: 10,
   });
 
-  // console.log("Storing dishName in localStorage:", dishName);
-  // localStorage.setItem("dishName", JSON.stringify(dishName));
-
   const generateFacts = `
   You are a grandma who is a very good cook with expertise in traditional ${recipeCuisine} cuisine.
   With this dish name: ${dishName}, please respond ONLY two short fun facts about this dish
@@ -131,10 +64,9 @@ router.get("/api/gpt", async (ctx) => {
     max_tokens: 150,
   });
 
-  // const dishNameAndFacts = `${dishName}\n${twoFacts}`;
-  // ctx.response.body = { dishNameAndFacts, dishName };
   // ctx.response.body = `${dishName}<br>${twoFacts}`;
   ctx.response.body = dishName + "\n" + twoFacts;
+  //   ctx.response.body = { dishName: dishName, twoFacts: twoFacts };
 });
 
 router.get("/api/gpt/recipe", async (ctx) => {
@@ -168,7 +100,7 @@ router.post("/aiRequest", async (ctx) => {
 
     const result = await gptPrompt(askPrompt, {
       temperature: 0.7,
-      max_tokens: 150,
+      max_tokens: 200,
     });
 
     ctx.response.status = 200; // OK
@@ -186,6 +118,7 @@ router.post("/aiRequest", async (ctx) => {
 router.get("/api/dalle", async (ctx) => {
   // const prompt = ctx.request.url.searchParams.get("prompt");
   const prompt = `Generate a pixelated image of a ${dishName}. `;
+  //   const prompt = `Generate a pixelated image of icecream `;
   console.log("Request received");
   console.log(prompt);
   const shortPrompt = prompt.slice(0, 1024);
@@ -245,47 +178,10 @@ router.get("/api/falfast", async (ctx) => {
   ctx.response.body = result.images[0].url;
 });
 
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// Check if dishName is stored in localStorage
-// const storedDishName = localStorage.getItem("dishName");
-// console.log("Stored dishName in localStorage:", storedDishName);
-
-// // Parse the dishName if it exists
-// if (storedDishName) {
-//   const dishName = JSON.parse(storedDishName);
-//   console.log("Parsed dishName:", dishName);
-
-//   // Now you can use the dishName variable in this script
-//   const recipeName = dishName;
-//   console.log("Recipe Name:", recipeName);
-// } else {
-//   console.log("No dishName found in localStorage.");
-// }
-
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(staticServer);
 
-console.log(chalk.green("\nListening on http://localhost:8001"));
+console.log(chalk.green("\nListening on http://localhost:8002"));
 
-await app.listen({ port: 8000, signal: createExitSignal() });
-
-// router
-//   .get("/", (context) => context.response.redirect("./public/index.html"))
-//   .post("/submit", async (context) => {
-//     try {
-//       const { input } = await context.request.body().value;
-//       const gptResponse = await gptPrompt(input);
-//       context.response.body = { gpt: gptResponse };
-//     } catch (error) {
-//       console.error("Error:", error);
-//       context.response.status = 500;
-//       context.response.body = {
-//         error: "Failed to generate output. Please try again.",
-//       };
-//     }
-//   });
+await app.listen({ port: 8002, signal: createExitSignal() });

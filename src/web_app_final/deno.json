@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --allow-env --allow-net --allow-read=../.. web_final_wip.js",
-    "dev": "deno run --allow-env --allow-net --allow-read=../.. --watch --no-clear-screen web_final_wip.js"
+    "start": "deno run --allow-env --allow-net --allow-read=../.. web_app_finalised.js",
+    "dev": "deno run --allow-env --allow-net --allow-read=../.. --watch --no-clear-screenweb_app_finalised.js"
   }
 }

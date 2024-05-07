@@ -11,9 +11,61 @@
     />
     <link rel="stylesheet" href="style.css" />
 
-    <title>Document</title>
+    <title>Learn about the dish</title>
   </head>
   <body>
+    <style>
+      .interRight {
+        border: 10px solid #f0b5bc;
+        padding: 20px;
+      }
+
+      #commandDivRight {
+        flex-grow: 2;
+        width: 40vw;
+
+        overflow-x: auto;
+        overflow-y: auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        /* justify-content: center; */
+
+        background-color: #ffe7e4;
+      }
+
+      .interLeft {
+        border: 10px solid #f1c2dd;
+        padding: 20px;
+      }
+
+      #commandDivLeft {
+        flex-grow: 2;
+        width: 40vw;
+
+        overflow-x: auto;
+        overflow-y: auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        /* justify-content: center; */
+
+        background-color: #ffe6ef;
+      }
+
+      .terminal-container {
+        display: flex;
+
+        justify-content: center;
+        align-items: stretch;
+
+        /* background-color: #bbdefb; */
+        height: 100%;
+        padding: 100px;
+        padding-left: 0;
+        padding-right: 0;
+        gap: 20px;
+      }
+    </style>
+
     <div class="terminal-container">
       <div class="preloader visually-hidden"></div>
       <div class="recipe-steps-chat">
@@ -34,6 +86,7 @@
         window.location.href = "./index.html";
       });
     </script>
+    <!-- <script src="script-terminal.js"></script> -->
     <script src="script-terminal.js"></script>
   </body>
 </html>
